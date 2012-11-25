@@ -140,7 +140,7 @@ function toStep3(){
 		return;
 	}
 	if (donationAmount > 500){
-		$("#numJacket").find("p").html("Sorry, we're capable of accepting donations over $500 at this time. Please split up your contribution into several smaller ones.");
+		$("#numJacket").find("p").html("Sorry, we're not capable of accepting donations over $500 at this time. Please split up your contribution into several smaller ones.");
 		return;
 	}
 	$("#step3").css({"display":"block"}).animate({"opacity":100},"slow");
@@ -173,7 +173,8 @@ function donate(){
 
 	$.ajax({
 		"url":"pay.php",
-		"data":{"myState":myState,"myCollege":myCollege,"theirState":theirState,"theirCollege":theirCollege,"amount":amount}
+		"data":{"myState":myState,"myCollege":myCollege,"theirState":theirState,"theirCollege":theirCollege,"amount":amount},
+		"success":function(){$("#paypal").submit();}
 	});
 
 	$("#step4").css({"display":"block"}).animate({"opacity":100},"slow");
