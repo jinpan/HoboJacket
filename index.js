@@ -135,7 +135,7 @@ function showQuantities(){
 function toStep3(){
 	var donationAmount = Number($("#donationAmount").val());
 	$("#numJacket").css({"display":"block"}).animate({"opacity":100},"slow");
-	if (isNaN(donationAmount)){
+	if (isNaN(donationAmount) || donationAmount < 0){
 		$("#numJacket").find("p").html("Please enter a valid amount");
 		return;
 	}
