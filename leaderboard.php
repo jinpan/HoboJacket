@@ -18,6 +18,7 @@ function lookUp($state,$university){
 	<title>Hobo Jacket</title>
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="ga.js"></script>
 </head>
 <body style="padding-top:60px">
 <div class="navbar navbar-inverse navbar-fixed-top">
