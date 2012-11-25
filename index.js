@@ -139,6 +139,10 @@ function toStep3(){
 		$("#numJacket").find("p").html("Please enter a valid amount");
 		return;
 	}
+	if (donationAmount > 500){
+		$("#numJacket").find("p").html("Sorry, we're capable of accepting donations over $500 at this time. Please split up your contribution into several smaller ones.");
+		return;
+	}
 	$("#step3").css({"display":"block"}).animate({"opacity":100},"slow");
 
 	var donationAmount = Number($("#donationAmount").val());
