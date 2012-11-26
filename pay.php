@@ -11,6 +11,8 @@ $theirState = sanitize($_REQUEST['theirState']);
 $theirCollege = sanitize($_REQUEST['theirCollege']);
 $amount = max(0,min(500,(float)sanitize($_REQUEST['amount'])));
 
+if (!is_numeric($theirState) || !is_numeric($theirCollege) || !is_numeric($amount)){exit(0);}
+
 $query = "INSERT INTO Donations (myState,myCollege,theirState,theirCollege,amount) VALUES ('$myState','$myCollege','$theirState','$theirCollege','$amount')";
 mysql_query($query);
 

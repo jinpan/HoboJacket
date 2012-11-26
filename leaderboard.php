@@ -99,11 +99,55 @@ else {
 
 $numShown = 10;
 
-$q1 = "SELECT * FROM GivingUniversity ORDER BY amount DESC LIMIT $numShown";
-$r1 = mysql_query($q1);
+$result1 = mysql_query("SELECT * FROM GivingUniversity ORDER BY amount DESC LIMIT $numShown");
+$data1 = array();
+$data1_sorted = array();
 
-$q2 = "SELECT * FROM ReceivingUniversity ORDER BY amount DESC LIMIT $numShown";
+$q1 = "SELECT * FROM Universities WHERE";
+
+$temp = mysql_fetch_assoc($result1);
+$data1[$temp["state"]][$temp["university"]] = intval($temp["amount"]/10.0);
+$data1_sorted[]=array($temp["state"],$temp["university"]);
+$q1.= "(state='{$temp["state"]}' AND id='{$temp["university"]}')";
+while ($temp = mysql_fetch_assoc($result1)){
+	$data1[$temp["state"]][$temp["university"]] = intval($temp["amount"]/10.0);
+	$data1_sorted[]=array($temp["state"],$temp["university"]);
+	$q1.= " OR (state='{$temp["state"]}' AND id='{$temp["university"]}')";
+}
+$r1 = mysql_query($q1);
+$names1 = array();
+while ($temp = mysql_fetch_assoc($r1)){
+	$names1[$temp["state"]][$temp["id"]] = $temp["name"];
+}
+for ($i=0;$i!=count($data1_sorted);$i++){
+	$temp = $data1_sorted[$i];
+	$data1_sorted[$i] = array($names1[$temp[0]][$temp[1]], $data1[$temp[0]][$temp[1]]);
+}
+
+$result2 = mysql_query("SELECT * FROM ReceivingUniversity ORDER BY amount DESC LIMIT $numShown");
+$data2 = array();
+$data2_sorted = array();
+
+$q2 = "SELECT * FROM Universities WHERE";
+
+$temp = mysql_fetch_assoc($result2);
+$data2[$temp["state"]][$temp["university"]] = intval($temp["amount"]/10.0);
+$data2_sorted[]=array($temp["state"],$temp["university"]);
+$q2.= "(state='{$temp["state"]}' AND id='{$temp["university"]}')";
+while ($temp = mysql_fetch_assoc($result2)){
+	$data2[$temp["state"]][$temp["university"]] = intval($temp["amount"]/10.0);
+	$data2_sorted[]=array($temp["state"],$temp["university"]);
+	$q2.= " OR (state='{$temp["state"]}' AND id='{$temp["university"]}')";
+}
 $r2 = mysql_query($q2);
+$names2 = array();
+while ($temp = mysql_fetch_assoc($r2)){
+	$names2[$temp["state"]][$temp["id"]] = $temp["name"];
+}
+for ($i=0;$i!=count($data2_sorted);$i++){
+	$temp = $data2_sorted[$i];
+	$data2_sorted[$i] = array($names2[$temp[0]][$temp[1]], $data2[$temp[0]][$temp[1]]);
+}
 
 ?>
 
@@ -111,10 +155,8 @@ $r2 = mysql_query($q2);
 	<table class="table table-hover">
 	<tr><th>College Name</th><th>Jackets donated</th></tr>
 	<?php
-	for ($i=0;$i!=$numShown;$i++){
-		$d1 = mysql_fetch_assoc($r1);
-		$tempAmount = intval($d1['amount']/10.0);
-		if ($tempAmount){print "<tr><td>".lookUp($d1["state"],$d1["university"])."</td><td>$tempAmount</td></tr>";}
+	for ($i=0;$i!=count($data1_sorted);$i++){
+		if ($data1_sorted[$i][1]){print "<tr><td>".$data1_sorted[$i][0]."</td><td>{$data1_sorted[$i][1]}</td></tr>";}
 	}
 	?>
 	</table>
@@ -125,10 +167,8 @@ $r2 = mysql_query($q2);
 	<table class="table table-hover">
 	<tr><th>College Name</th><th>Jackets donated to</th></tr>
 	<?php
-	for ($i=0;$i!=$numShown;$i++){
-		$d2 = mysql_fetch_assoc($r2);
-		$tempAmount = intval($d2['amount']/10.0);
-		if ($tempAmount){print "<tr><td>".lookUp($d2["state"],$d2["university"])."</td><td>$tempAmount</td></tr>";}
+	for ($i=0;$i!=count($data2_sorted);$i++){
+		if ($data2_sorted[$i][1]){print "<tr><td>".$data2_sorted[$i][0]."</td><td>{$data2_sorted[$i][1]}</td></tr>";}
 	}
 	?>
 
